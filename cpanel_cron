@@ -6,13 +6,14 @@
 
 # Create a backup of the specified user and then move it to the /backupdrive location, deleting the oldest in the process.
 
-USER="<USERNAME>"
+USER=$1
 
 /scripts/pkgacct $USER
 
 # Make sure the backup completed successfully.
 if [ $? -ne 0 ]; then
-        echo "Backup for pickeringtoyota failed.  Aborting backup process."
+        echo "Backup for $USER failed."
+		echo "Aborting backup process."
         exit 1
 fi
 
@@ -22,6 +23,6 @@ fi
 find /backupdrive/$USER/ -type f -name '*.tar.gz' -mtime +5 -exec rm -f {} \;
 
 # Now, move the new backup to the backup drive.
-mv /home/cpmove-$USER.tar.gz /backupdrive/$USER/$USER_$(date '+%Y-%m-%d').tar.gz
+mv /home/cpmove-${USER}.tar.gz /backupdrive/${USER}/${USER}_$(date '+%Y-%m-%d').tar.gz
 
 exit 0
